@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SurveyDevTools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-950:#090C11;
+    --bg-900:#0D1117;
+    --card-bg:#131820;
+    --card-bg-hover:#171D27;
+    --border:#232A35;
+    --border-hover:#3A4A6B;
+    --text:#F2F4F7;
+    --text-dim:#98A2B3;
+    --text-faint:#5B6472;
+    --accent:#7C9CFF;
+    --accent-dim:#5A78E0;
+    --accent-soft:rgba(124,156,255,0.12);
+    --badge-bg:rgba(124,156,255,0.14);
+    --badge-text:#AABEFF;
+    --radius:16px;
+    --font-display:'Space Grotesk', sans-serif;
+    --font-body:'Inter', sans-serif;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html, body{
+    height:100%;
+  }
+
+  body{
+    background:
+      radial-gradient(1100px 480px at 50% -10%, rgba(124,156,255,0.10), transparent 60%),
+      var(--bg-950);
+    color:var(--text);
+    font-family:var(--font-body);
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+
+  .wrap{
+    max-width:1240px;
+    width:100%;
+    margin:0 auto;
+    padding:0 32px 40px;
+    display:flex;
+    flex-direction:column;
+    flex:1;
+  }
+
+  main{
+    flex:1;
+    padding-bottom:40px;
+  }
+
+  /* ---------- HEADER ---------- */
+
+  header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:24px;
+    padding:26px 0;
+    border-bottom:1px solid var(--border);
+    margin-bottom:48px;
+  }
+
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    flex-shrink:0;
+  }
+
+  .brand-mark{
+    width:36px;
+    height:36px;
+    border-radius:9px;
+    background:var(--accent-soft);
+    border:1px solid var(--border-hover);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--accent);
+  }
+
+  .brand-mark svg{ width:18px; height:18px; }
+
+  .brand-name{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:19px;
+    letter-spacing:-0.01em;
+    white-space:nowrap;
+  }
+
+  .search-box{
+    flex:1;
+    max-width:460px;
+    position:relative;
+  }
+
+  .search-box svg{
+    position:absolute;
+    left:16px;
+    top:50%;
+    transform:translateY(-50%);
+    width:16px;
+    height:16px;
+    color:var(--text-faint);
+    pointer-events:none;
+  }
+
+  .search-box input{
+    width:100%;
+    background:var(--card-bg);
+    border:1px solid var(--border);
+    border-radius:11px;
+    padding:11px 16px 11px 42px;
+    font-family:var(--font-body);
+    font-size:14px;
+    color:var(--text);
+    outline:none;
+    transition:border-color 0.2s ease, background 0.2s ease;
+  }
+
+  .search-box input::placeholder{ color:var(--text-faint); }
+
+  .search-box input:focus{
+    border-color:var(--accent-dim);
+    background:var(--card-bg-hover);
+  }
+
+  /* ---------- GRID ---------- */
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(268px, 1fr));
+    gap:20px;
+  }
+
+  .card{
+    background:var(--card-bg);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:24px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    text-decoration:none;
+    color:inherit;
+    transition:transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .card:hover, .card:focus-visible{
+    transform:translateY(-3px);
+    border-color:var(--border-hover);
+    background:var(--card-bg-hover);
+    box-shadow:0 16px 32px rgba(0,0,0,0.35);
+  }
+
+  .card:focus-visible{
+    outline:2px solid var(--accent);
+    outline-offset:2px;
+  }
+
+  .card-name{
+    font-family:var(--font-display);
+    font-size:18px;
+    font-weight:600;
+    line-height:1.35;
+  }
+
+  .card-desc{
+    font-size:13.5px;
+    color:var(--text-dim);
+    font-style:italic;
+    line-height:1.55;
+    flex-grow:1;
+  }
+
+  .card-divider{
+    border:none;
+    border-top:1px solid var(--border);
+    margin:2px 0;
+  }
+
+  .card-footer{
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    gap:10px;
+  }
+
+  .card-open{
+    font-size:13px;
+    font-weight:600;
+    color:var(--accent);
+    display:flex;
+    align-items:center;
+    gap:5px;
+    transition:gap 0.2s ease;
+  }
+
+  .card:hover .card-open, .card:focus-visible .card-open{
+    gap:8px;
+  }
+
+  .card-open svg{ width:13px; height:13px; }
+
+  .no-results{
+    display:none;
+    text-align:center;
+    padding:60px 20px;
+    color:var(--text-faint);
+    font-size:14px;
+  }
+
+  .no-results.visible{ display:block; }
+
+  footer{
+    margin-top:auto;
+    padding-top:22px;
+    border-top:1px solid var(--border);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:10px;
+    font-size:12.5px;
+    color:var(--text-faint);
+  }
+
+  @media (max-width:760px){
+    header{
+      flex-wrap:wrap;
+      padding:20px 0;
+    }
+    .search-box{ order:3; max-width:none; width:100%; }
+  }
+
+  @media (max-width:560px){
+    .wrap{ padding:0 20px 60px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header>
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+      </div>
+      <div class="brand-name">SurveyDevTools</div>
+    </div>
+
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      <input type="text" id="searchInput" placeholder="Search by title...">
+    </div>
+  </header>
+
+  <main>
+    <div class="grid" id="toolGrid"></div>
+    <div class="no-results" id="noResults">No tools match your search.</div>
+  </main>
+
+  <footer>
+    <span>SurveyDevTools &copy; 2026</span>
+    <span>Developed by Sachin Katiyar</span>
+  </footer>
+
+</div>
+
+<script>
+  /* =====================================================================
+     TOOLS — this is the only thing you need to touch to add a new card.
+     Just copy a block below, change the values, and save. The grid
+     renders itself from this array — no other code needs to change.
+
+     Fields:
+       name  : Tool name shown on the card
+       desc  : One or two line description
+       url   : Link to the live tool (e.g. "/tool-name/" or full URL)
+       stack : Short label shown in the badge (e.g. "HTML · CSS · JS", "React")
+  ====================================================================== */
+
+  const TOOLS = [
+
+    {
+      name: "NotesSnipt",
+      desc: "Access and manage your code snippets anywhere.",
+      url: "https://notessnipt.netlify.app/",
+      stack: "HTML · CSS · JS"
+    },
+
+    {
+      name: "LazyLooper",
+      desc: "Generate repeated text blocks from a template and variable loops.",
+      url: "https://lazylooper.netlify.app/",
+      stack: "HTML · CSS · JS"
+    },
+    
+    {
+      name: "DCMResourceGenerator.",
+      desc: "Generate Decipher <res> resources for DCM (Conjoint).",
+      url: "https://dcmresourcegenerator.netlify.app/",
+      stack: "HTML · CSS · JS"
+    },
+
+    {
+      name: "XlsDat.IO",
+      desc: "CSV / Excel → .DAT Converter",
+      url: "https://xlsdatio.streamlit.app/",
+      stack: "HTML · CSS · JS"
+    },
+
+    {
+      name: "Text Quant",
+      desc: "A simple & fast character counter.",
+      url: "https://textquant.netlify.app/",
+      stack: "HTML · CSS · JS"
+    }
+    // Add your next tool here — just copy the block above ⬆
+    // {
+    //   name: "New Tool Name",
+    //   desc: "Short description of what it does.",
+    //   url: "https://yourdomain.com/new-tool/",
+    //   stack: "HTML · CSS · JS" // or "React"
+    // },
+  ];
+
+  const arrowIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>`;
+
+  const grid = document.getElementById('toolGrid');
+  const noResults = document.getElementById('noResults');
+  const searchInput = document.getElementById('searchInput');
+
+  function renderTools(filter = ''){
+    grid.innerHTML = '';
+    const q = filter.trim().toLowerCase();
+    const filtered = TOOLS.filter(t => t.name.toLowerCase().includes(q));
+
+    filtered.forEach(tool => {
+      const card = document.createElement('a');
+      card.className = 'card';
+      card.href = tool.url;
+      card.target = '_blank';
+      card.rel = 'noopener noreferrer';
+      card.setAttribute('aria-label', `Open ${tool.name} in a new tab`);
+
+      card.innerHTML = `
+        <div class="card-name">${tool.name}</div>
+        <div class="card-desc">${tool.desc}</div>
+        <hr class="card-divider">
+        <div class="card-footer">
+          <span class="card-open">Open Tool ${arrowIcon}</span>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+
+    noResults.classList.toggle('visible', filtered.length === 0);
+  }
+
+  searchInput.addEventListener('input', (e) => renderTools(e.target.value));
+
+  renderTools();
+</script>
+
+</body>
+</html>
